@@ -19,18 +19,15 @@ EOF
 }
 
 run() {
-    if ls /dev/isgx >/dev/null &>/dev/null; then
-        echo "SGX Driver installed"
-    else
+    ls /dev/isgx >/dev/null &>/dev/null || {
         echo "SGX Driver NOT installed"
         exit 1
-    fi
+    }
 
     kill
 
-    docker run -d -it -v $SRC:/root/src:rw --device /dev/isgx -p 5222:5222 --name $CONTAINER $IMAGE
-
-    attach
+    docker run -d -it -v $SRC:/root/src:rw --device /dev/isgx -p 5222 --name $CONTAINER $IMAGE
+    docker port $CONTAINER
 }
 
 attach() {
