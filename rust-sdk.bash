@@ -26,7 +26,7 @@ run() {
 
     kill
 
-    docker run -d -it -v $SRC:/root/src:rw --device /dev/isgx -p 5222 --name $CONTAINER $IMAGE
+    docker run -d -it -v $SRC:/root/src:rw --device /dev/isgx -p 5222 -e SGX_MODE=HW --name $CONTAINER $IMAGE
     docker port $CONTAINER
 }
 

@@ -36,4 +36,4 @@ RUN echo 'LD_LIBRARY_PATH=/opt/intel/libsgx-enclave-common/aesm /opt/intel/libsg
 # (see https://github.com/rust-rocksdb/rust-rocksdb/issues/217)
 RUN echo 'export ROCKSDB_LIB_DIR=/usr/local/lib' >> /root/.bashrc
 
-EXPOSE 5222
+EXPOSE 5222 8000
