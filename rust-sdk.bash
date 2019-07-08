@@ -2,7 +2,8 @@
 
 IMAGE=rust-sdk
 SRC=$(pwd)
-CONTAINER=$IMAGE-$(basename $SRC)
+DIR=$(basename $SRC)
+CONTAINER=$IMAGE-$DIR
 
 usage() {
     cat <<EOF
@@ -12,7 +13,7 @@ Set up Docker container with baidu/rust-sgx-sdk.
 
 OPTIONS:
    -h, --help    Show this message
-   -r, --run     Create or recreate container
+   -r, --run     Create/recreate container and attach
    -a, --attach  Attach shell to existing container
    -k, --kill    Kill container if exists
 EOF
@@ -26,8 +27,10 @@ run() {
 
     kill
 
-    docker run -d -it -v $SRC:/root/src:rw --device /dev/isgx -p 5222 -e SGX_MODE=HW --name $CONTAINER $IMAGE
+    docker run -d -it -v $SRC:/root/$DIR:rw --device /dev/isgx -p 5222 -p 8000 -e SGX_MODE=HW --name $CONTAINER $IMAGE
     docker port $CONTAINER
+
+    attach
 }
 
 attach() {
