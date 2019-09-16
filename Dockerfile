@@ -1,4 +1,4 @@
-FROM baiduxlab/sgx-rust:1804-1.0.8
+FROM baiduxlab/sgx-rust:1804-1.0.9
 
 WORKDIR /root
 
@@ -12,7 +12,7 @@ RUN /root/.cargo/bin/rustup component add rustfmt && \
     rm -rf /root/.cargo/git && \
     rm -rf /root/sgx
 
-RUN git clone --depth 1 -b v1.0.8 https://github.com/baidu/rust-sgx-sdk.git /root/sgx
+RUN git clone --depth 1 -b v1.0.9 https://github.com/baidu/rust-sgx-sdk.git /root/sgx
 
 RUN echo 'LD_LIBRARY_PATH=/opt/intel/libsgx-enclave-common/aesm /opt/intel/libsgx-enclave-common/aesm/aesm_service &' >> /root/.bashrc
 
