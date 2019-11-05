@@ -25,12 +25,16 @@ run() {
         exit 1
     }
 
-    kill
-
-    docker run -d -it -v $SRC:/root/$DIR:rw --device /dev/isgx -p 5222 -p 8000 -e SGX_MODE=HW --name $CONTAINER $IMAGE
-    docker port $CONTAINER
-
-    attach
+    if [[ $(docker ps --all --filter "name=^/$CONTAINER$" --format '{{.Names}}') == $CONTAINER ]]; then
+        docker start $CONTAINER
+        docker attach $CONTAINER
+    else
+        docker run -d -it -v $SRC:/root/$DIR:rw --device /dev/isgx \
+            -e SGX_MODE=HW \
+            -e IAS_API_KEY=$IAS_API_KEY \
+            -e IAS_SPID=$IAS_SPID \
+            --name $CONTAINER $IMAGE
+    fi
 }
 
 attach() {
