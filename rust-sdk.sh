@@ -2,8 +2,10 @@
 
 IMAGE=rust-sdk
 SRC=$(pwd)
+SRC_SHA=$(echo $SRC -n | sha512sum)
+SRC_SHA=${SRC_SHA:0:5}
 DIR=$(basename $SRC)
-CONTAINER=$IMAGE-$DIR
+CONTAINER=$IMAGE-$DIR-$SRC_SHA
 
 usage() {
     cat <<EOF
@@ -27,7 +29,6 @@ run() {
 
     if [[ $(docker ps --all --filter "name=^/$CONTAINER$" --format '{{.Names}}') == $CONTAINER ]]; then
         docker start $CONTAINER
-        docker attach $CONTAINER
     else
         docker run -d -it -v $SRC:/root/$DIR:rw --device /dev/isgx \
             -e SGX_MODE=HW \
@@ -35,6 +36,8 @@ run() {
             -e IAS_SPID=$IAS_SPID \
             --name $CONTAINER $IMAGE
     fi
+
+    attach
 }
 
 attach() {

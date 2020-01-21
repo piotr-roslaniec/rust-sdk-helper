@@ -1,4 +1,4 @@
-FROM baiduxlab/sgx-rust:1804-1.0.9
+FROM baiduxlab/sgx-rust:1804-1.1.0
 
 WORKDIR /root
 
@@ -13,11 +13,11 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 RUN rustup component add rustfmt && \
-    cargo install bindgen cargo-audit clippy cargo-sort-ck cargo-tree && \
+    cargo install bindgen cargo-audit clippy cargo-sort-ck cargo-tree cargo-vendor cargo-audit && \
     rm -rf /root/.cargo/registry && \
     rm -rf /root/.cargo/git && \
     rm -rf /root/sgx
 
-RUN git clone --depth 1 -b v1.0.9 https://github.com/baidu/rust-sgx-sdk.git /root/sgx
+RUN git clone --depth 1 -b v1.1.0 https://github.com/baidu/rust-sgx-sdk.git /root/sgx
 
 RUN echo 'LD_LIBRARY_PATH=/opt/intel/libsgx-enclave-common/aesm /opt/intel/libsgx-enclave-common/aesm/aesm_service &' >> /root/.bashrc
